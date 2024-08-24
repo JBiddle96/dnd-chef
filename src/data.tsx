@@ -1,7 +1,7 @@
 import { setDoc, doc } from "firebase/firestore";
 import { db } from "./App";
 import { Person } from "./types";
-import { format, differenceInWeeks, Day, nextDay, differenceInDays, addWeeks } from "date-fns";
+import { differenceInWeeks, addWeeks } from "date-fns";
 
 export const chefs = ["Alison", "Sarah", "Brodie", "Andre", "James"];
 
