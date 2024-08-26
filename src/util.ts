@@ -17,4 +17,3 @@ export const dayLookup = new Map<string, Day>([
     ["friday", 5],
     ["saturday", 6]
 ]);
-

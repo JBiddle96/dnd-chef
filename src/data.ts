@@ -1,7 +1,6 @@
-import { setDoc, doc } from "firebase/firestore";
-import { db } from "./App";
-import { Person } from "./types";
+import { Person } from "./types.ts";
 import { differenceInWeeks, addWeeks } from "date-fns";
+import { loadFirestore } from "./firebase.ts";
 
 export const chefs = ["Alison", "Sarah", "Brodie", "Andre", "James"];
 
@@ -29,6 +28,8 @@ export function expireStaleCreditData(chefs: Person[]) {
 }
 
 export async function pushChefData(chefs: Person[]) {
+    const { setDoc, doc } = await import('firebase/firestore');
+    const db = await loadFirestore()
     for (let chef of chefs) {
         try {
             await setDoc(doc(db, "chefs", chef.name), chef);
@@ -40,6 +41,8 @@ export async function pushChefData(chefs: Person[]) {
 }
 
 export async function addDefaultData(overwrite: boolean = false) {
+    const { setDoc, doc } = await import('firebase/firestore');
+    const db = await loadFirestore()
     for (const [index, name] of chefs.entries()) {
         try {
             await setDoc(doc(db, "chefs", name), {
