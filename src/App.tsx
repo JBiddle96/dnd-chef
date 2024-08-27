@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import type { Day } from "date-fns";
-import { format, nextDay, differenceInDays, differenceInWeeks, addWeeks } from "date-fns";
+import { format, nextDay, differenceInDays, differenceInWeeks, addWeeks, startOfDay } from "date-fns";
 import { CardContent, CardHeader, CircularProgress } from '@mui/material';
 import isEqual from 'lodash.isequal';
 
@@ -21,7 +21,7 @@ import { loadFirestore, loadRemoteConfig } from "./firebase.ts";
 
 function calculateChef(chefs: Person[], selectedDate: Date, offset: number): Person | undefined {
   if (chefs.length === 0) return
-  let nCycles = differenceInWeeks(selectedDate, new Date())
+  let nCycles = differenceInWeeks(selectedDate, startOfDay(new Date()))
   let offsetChefs = pRow(chefs, offset)
   const credit = new Map<string, number>(offsetChefs.map((p) => [p.name, p.credit]))
   let chosenChef: Person | undefined
@@ -86,7 +86,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date()); // The date picked in the calendar
 
   function nextSessionFromDate(date: Date): Date {
-    const nextSession = date.getDay() == dndDayOfWeek ? date : nextDay(date, dndDayOfWeek)
+    const nextSession = date.getDay() == dndDayOfWeek ? startOfDay(date) : nextDay(date, dndDayOfWeek)
     return nextSession
   }
 
@@ -143,7 +143,6 @@ function App() {
   }
 
   function onChangeCredit(chef: Person, newCredit: number) {
-    console.log("new credit: ", newCredit)
     const newChef = structuredClone(chef)
     if (newCredit < 0) return
     const idx = chefData.indexOf(chef)
